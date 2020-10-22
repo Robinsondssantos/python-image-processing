@@ -4,6 +4,39 @@ import matplotlib.pyplot as plt
 import numpy as np
 import cv2
 
+def generate_initial_seed(cipher):
+    value = 0
+    for c in cipher:
+        value = value + ord(c)
+    value = value * value
+
+    string = str(value)[1:4]
+    size = len(str(int(string)))
+
+    # print('size:', size)
+    # print('string:', string)
+    if size < 3:
+        # print(string)
+        string = string + (3 - size) * '1'
+        # print(string)
+
+    return int(string)
+
+def generate_seed(initial_seed):
+    value = initial_seed * initial_seed
+    # print('value:', value)
+
+    string = str(value)[1:4]
+    size = len(str(int(string)))
+
+    # print('size:', size)
+    # print('string:', string)
+    if size < 3:
+        # print(string)
+        string = string + (3 - size) * '1'
+        # print(string)
+
+    return int(string)
 
 def open_image(image_path):
     image = cv2.imread(image_path)
@@ -143,13 +176,21 @@ def gerenate_xor_image_with_cipher(image, cipher='robinson'):
     width = image.shape[1]
     channels = image.shape[2]
 
-    index = 0
+    initial = 0
+    for c in cipher:
+        initial = initial + ord(c)
+    initial = initial * initial
 
+    initial = str(initial)[:-1]
+    
+    value = generate_initial_seed(cipher)
+    index = 0
     for x in range(width):
         for y in range(height):
             r, g, b = image[y, x]
-            value = ord(cipher[index])
-            image[y, x] = [r ^ value, g ^ value, b ^ value]
+            value = generate_seed(value)
+            _value = value & 255
+            image[y, x] = [r ^ _value, g ^ _value, b ^ _value]
 
             if index < len(cipher) - 1:
                 index = index + 1
@@ -233,11 +274,11 @@ def save_image(image):
 
 
 def main():
-    image = open_image('input/Boat.jpg')
+    image = open_image('input/Dogao.jpg')
     # save_image_array(image, 'changed.txt')
-    image = gerenate_shift_left_image(image)
+    image = gerenate_xor_image_with_cipher(image, 'robinson')
     show_image(image)
-    save_image(image)
+    # save_image(image)
 
 
 if __name__ == '__main__':

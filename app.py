@@ -1,5 +1,6 @@
 from datetime import datetime
-from random import randint
+import random
+# from random import randint, seed
 import matplotlib.pyplot as plt
 import numpy as np
 import cv2
@@ -162,11 +163,13 @@ def gerenate_xor_image(image):
     height = image.shape[0]
     width = image.shape[1]
     channels = image.shape[2]
+    
+    random.seed(30)
 
     for x in range(width):
         for y in range(height):
             r, g, b = image[y, x]
-            random_number = randint(0, 255)
+            random_number = random.randint(0, 255)
             image[y, x] = [r ^ random_number, g ^ random_number, b ^ random_number]
 
     return image
@@ -176,21 +179,24 @@ def gerenate_xor_image_with_cipher(image, cipher='robinson'):
     width = image.shape[1]
     channels = image.shape[2]
 
-    initial = 0
-    for c in cipher:
-        initial = initial + ord(c)
-    initial = initial * initial
+    random.seed(30)
 
-    initial = str(initial)[:-1]
+    # initial = 0
+    # for c in cipher:
+    #     initial = initial + ord(c)
+    # initial = initial * initial
+
+    # initial = str(initial)[:-1]
     
-    value = generate_initial_seed(cipher)
+    # value = generate_initial_seed(cipher)
     index = 0
     for x in range(width):
         for y in range(height):
             r, g, b = image[y, x]
-            value = generate_seed(value)
-            _value = value & 255
-            image[y, x] = [r ^ _value, g ^ _value, b ^ _value]
+            value = random.randint(0, 255)
+            # value = generate_seed(value)
+            # _value = value & 255
+            image[y, x] = [r ^ value, g ^ value, b ^ value]
 
             if index < len(cipher) - 1:
                 index = index + 1
@@ -274,9 +280,9 @@ def save_image(image):
 
 
 def main():
-    image = open_image('input/Dogao.jpg')
-    # save_image_array(image, 'changed.txt')
-    image = gerenate_xor_image_with_cipher(image, 'robinson')
+    image = open_image('input/Boat-cipher.jpg')
+    image = gerenate_xor_image(image)
+    # save_image_array(image, 'original.txt')
     show_image(image)
     # save_image(image)
 

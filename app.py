@@ -47,9 +47,9 @@ def open_image(image_path):
 def save_image_array(image, description):
     img = open(description, 'w')
     img.write(str(image))
-    img.close()    
+    img.close()     
 
-def gerenate_grayscale_image(image):
+def generate_grayscale_image(image):
     height = image.shape[0]
     width = image.shape[1]
     channels = image.shape[2]
@@ -61,7 +61,26 @@ def gerenate_grayscale_image(image):
 
     return image
 
-def gerenate_red_image(image):
+def generate_binary_image(image, level=0.5):
+    height = image.shape[0]
+    width = image.shape[1]
+    channels = image.shape[2]
+
+    level_value = int(level * 255)
+
+    for x in range(width):
+        for y in range(height):
+            r, g, b = image[y, x]
+            if g >= level_value:
+                g = 255
+            elif g < level_value:
+                g = 0
+
+            image[y, x] = [g, g, g]
+
+    return image       
+
+def generate_red_image(image):
     height = image.shape[0]
     width = image.shape[1]
     channels = image.shape[2]
@@ -73,7 +92,7 @@ def gerenate_red_image(image):
 
     return image    
 
-def gerenate_green_image(image):
+def generate_green_image(image):
     height = image.shape[0]
     width = image.shape[1]
     channels = image.shape[2]
@@ -85,7 +104,7 @@ def gerenate_green_image(image):
 
     return image
 
-def gerenate_blue_image(image):
+def generate_blue_image(image):
     height = image.shape[0]
     width = image.shape[1]
     channels = image.shape[2]
@@ -97,7 +116,7 @@ def gerenate_blue_image(image):
 
     return image
 
-def gerenate_inverted_color_image(image):
+def generate_inverted_color_image(image):
     height = image.shape[0]
     width = image.shape[1]
     channels = image.shape[2]
@@ -109,7 +128,7 @@ def gerenate_inverted_color_image(image):
 
     return image
 
-def gerenate_shift_right_image(image):
+def generate_shift_right_image(image):
     height = image.shape[0]
     width = image.shape[1]
     channels = image.shape[2]
@@ -121,7 +140,7 @@ def gerenate_shift_right_image(image):
 
     return image
 
-def gerenate_shift_left_image(image):
+def generate_shift_left_image(image):
     height = image.shape[0]
     width = image.shape[1]
     channels = image.shape[2]
@@ -133,7 +152,7 @@ def gerenate_shift_left_image(image):
 
     return image
 
-def gerenate_or_image(image):
+def generate_or_image(image):
     height = image.shape[0]
     width = image.shape[1]
     channels = image.shape[2]
@@ -146,7 +165,7 @@ def gerenate_or_image(image):
 
     return image
 
-def gerenate_and_image(image):
+def generate_and_image(image):
     height = image.shape[0]
     width = image.shape[1]
     channels = image.shape[2]
@@ -159,7 +178,7 @@ def gerenate_and_image(image):
 
     return image            
 
-def gerenate_xor_image(image):
+def generate_xor_image(image):
     height = image.shape[0]
     width = image.shape[1]
     channels = image.shape[2]
@@ -174,7 +193,7 @@ def gerenate_xor_image(image):
 
     return image
 
-def gerenate_xor_image_with_cipher(image, cipher='robinson'):
+def generate_xor_image_with_cipher(image, cipher='robinson'):
     height = image.shape[0]
     width = image.shape[1]
     channels = image.shape[2]
@@ -205,7 +224,7 @@ def gerenate_xor_image_with_cipher(image, cipher='robinson'):
 
     return image    
 
-def gerenate_not_image(image):
+def generate_not_image(image):
     height = image.shape[0]
     width = image.shape[1]
     channels = image.shape[2]
@@ -217,7 +236,7 @@ def gerenate_not_image(image):
 
     return image
 
-def gerenate_test1_image(image):
+def generate_test1_image(image):
     height = image.shape[0]
     width = image.shape[1]
     channels = image.shape[2]
@@ -280,11 +299,11 @@ def save_image(image):
 
 
 def main():
-    image = open_image('input/Boat-cipher.jpg')
-    image = gerenate_xor_image(image)
+    image = open_image('input/Dogao.jpg')
+    image = generate_binary_image(image)
     # save_image_array(image, 'original.txt')
     show_image(image)
-    # save_image(image)
+    save_image(image)
 
 
 if __name__ == '__main__':
